@@ -27,6 +27,7 @@
 </package>
 
 
+
 4.gedit my_first_ros_rclpy_pkg/setup.py
 이후 밑을 붙여넣기 
 
