@@ -68,8 +68,15 @@ setup(
     },
 )
 
+5.cd cd ~/robot_ws/src/parkjiho_homework1_pkg/parkjiho_homework1_pkg/parkjiho_homework1_pkg/parkjiho_homework1_pkg/입력
 
-5.gedit parkjiho_homework1_pkg/parkjiho_homework1_pkg/helloworld_publisher.py 명령어 실행
+
+6.touch parkjiho_homework1_pkg/helloworld_publisher.py 명령어로 퍼리셔 파일 생성
+
+7.touch parkjiho_homework1_pkg/helloworld_subscriber.py 명령어로 퍼브리셔 파일 서브스크라이버 생성
+
+8.cd ~/robot_ws/src/ 명령어 이후후
+gedit parkjiho_homework1_pkg/parkjiho_homework1_pkg/helloworld_publisher.py 명령어 실행
 이후 밑을 붙여넣기
 
 import rclpy
@@ -111,7 +118,7 @@ if __name__ == '__main__':
     main()
 
 
-6.gedit parkjiho_homework1_pkg/parkjiho_homework1_pkg/helloworld_subscriber.py명령어 실행
+9.gedit parkjiho_homework1_pkg/parkjiho_homework1_pkg/helloworld_subscriber.py명령어 실행
 이후 밑을 붙여넣기
 
 import rclpy
@@ -150,12 +157,16 @@ def main(args=None):
 if __name__ == '__main__':
     main()
 
-7.colcon build --packages-select parkjiho_homework1_pkg 명령어 실행
+10.cd robot_ws 명령어 실행
 
-8.ros2 run parkjiho_homework1_pkg helloworld_publisher 명령어 실행
+11. . ~/robot_ws/install/local_setup.bash 명령어 실행
 
-9.다른 터미널을 열어 ros2 run parkjiho_homework1_pkg helloworld_subscriber 명령어 실행
+12.colcon build --packages-select parkjiho_homework1_pkg 명령어 실행
 
-10.rqt_graph 명령어 실행
+13.ros2 run parkjiho_homework1_pkg helloworld_publisher 명령어 실행
+
+14.다른 터미널을 열어 ros2 run parkjiho_homework1_pkg helloworld_subscriber 명령어 실행
+
+15.rqt_graph 명령어 실행
 
 
