@@ -1,0 +1,159 @@
+1.cd ~/robot_ws/src/     명령어 실행
+
+2.ros2 pkg create parkjiho_homework1_pkg --build-type ament_python --dependencies rclpy std_msgs 명령어 입력
+
+
+3.gedit my_first_ros_rclpy_pkg/package.xml명령어 실행
+이후 밑을 붙여넣기
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>my_first_ros_rclpy_pkg</name>
+  <version>0.6.0</version>
+  <description>ROS 2 rclpy basic package for the ROS 2 seminar</description>
+  <maintainer email="passionvirus@gmail.com">Pyo</maintainer>
+  <license>Apache License 2.0</license>
+  <author email="mikael@osrfoundation.org">Mikael Arguedas</author>
+  <author email="passionvirus@gmail.com">Pyo</author>
+  <depend>rclpy</depend>
+  <depend>std_msgs</depend>
+  <test_depend>ament_copyright</test_depend>
+  <test_depend>ament_flake8</test_depend>
+  <test_depend>ament_pep257</test_depend>
+  <test_depend>python3-pytest</test_depend>
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+</package>
+
+
+4.gedit my_first_ros_rclpy_pkg/setup.py
+이후 밑을 붙여넣기 
+
+from setuptools import find_packages
+from setuptools import setup
+
+package_name = 'my_first_ros_rclpy_pkg'
+
+setup(
+    name=package_name,
+    version='0.6.0',
+    packages=find_packages(exclude=['test']),
+    data_files=[
+        ('share/ament_index/resource_index/packages',
+            ['resource/' + package_name]),
+        ('share/' + package_name, ['package.xml']),
+    ],
+    install_requires=['setuptools'],
+    zip_safe=True,
+    author='Mikael Arguedas, Pyo',
+    author_email='mikael@osrfoundation.org, passionvirus@gmail.com',
+    maintainer='Pyo',
+    maintainer_email='passionvirus@gmail.com',
+    keywords=['ROS'],
+    classifiers=[
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: Apache Software License',
+        'Programming Language :: Python',
+        'Topic :: Software Development',
+    ],
+    description='ROS 2 rclpy basic package for the ROS 2 seminar',
+    license='Apache License, Version 2.0',
+    tests_require=['pytest'],
+    entry_points={
+        'console_scripts': [
+            'helloworld_publisher = my_first_ros_rclpy_pkg.helloworld_publisher:main',
+            'helloworld_subscriber = my_first_ros_rclpy_pkg.helloworld_subscriber:main',
+        ],
+    },
+)
+
+
+5.gedit parkjiho_homework1_pkg/parkjiho_homework1_pkg/helloworld_publisher.py 명령어 실행
+이후 밑을 붙여넣기
+
+import rclpy
+from rclpy.node import Node
+from rclpy.qos import QoSProfile
+from std_msgs.msg import String
+
+
+class HelloworldPublisher(Node):
+
+    def __init__(self):
+        super().__init__('helloworld_publisher')
+        qos_profile = QoSProfile(depth=10)
+        self.helloworld_publisher = self.create_publisher(String, 'helloworld', qos_profile)
+        self.timer = self.create_timer(1, self.publish_helloworld_msg)
+        self.count = 0
+
+    def publish_helloworld_msg(self):
+        msg = String()
+        msg.data = 'Hello World: {0}'.format(self.count)
+        self.helloworld_publisher.publish(msg)
+        self.get_logger().info('Published message: {0}'.format(msg.data))
+        self.count += 1
+
+
+def main(args=None):
+    rclpy.init(args=args)
+    node = HelloworldPublisher()
+    try:
+        rclpy.spin(node)
+    except KeyboardInterrupt:
+        node.get_logger().info('Keyboard Interrupt (SIGINT)')
+    finally:
+        node.destroy_node()
+        rclpy.shutdown()
+
+
+if __name__ == '__main__':
+    main()
+
+
+6.gedit parkjiho_homework1_pkg/parkjiho_homework1_pkg/helloworld_subscriber.py명령어 실행
+이후 밑을 붙여넣기
+
+import rclpy
+from rclpy.node import Node
+from rclpy.qos import QoSProfile
+from std_msgs.msg import String
+
+
+class HelloworldSubscriber(Node):
+
+    def __init__(self):
+        super().__init__('Helloworld_subscriber')
+        qos_profile = QoSProfile(depth=10)
+        self.helloworld_subscriber = self.create_subscription(
+            String,
+            'helloworld',
+            self.subscribe_topic_message,
+            qos_profile)
+
+    def subscribe_topic_message(self, msg):
+        self.get_logger().info('Received message: {0}'.format(msg.data))
+
+
+def main(args=None):
+    rclpy.init(args=args)
+    node = HelloworldSubscriber()
+    try:
+        rclpy.spin(node)
+    except KeyboardInterrupt:
+        node.get_logger().info('Keyboard Interrupt (SIGINT)')
+    finally:
+        node.destroy_node()
+        rclpy.shutdown()
+
+
+if __name__ == '__main__':
+    main()
+
+7.colcon build --packages-select parkjiho_homework1_pkg 명령어 실행
+
+8.ros2 run parkjiho_homework1_pkg helloworld_publisher 명령어 실행
+
+9.다른 터미널을 열어 ros2 run parkjiho_homework1_pkg helloworld_subscriber 명령어 실행
+
+10.rqt_graph 명령어 실행
