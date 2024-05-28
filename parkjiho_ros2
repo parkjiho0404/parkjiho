@@ -157,3 +157,5 @@ if __name__ == '__main__':
 9.다른 터미널을 열어 ros2 run parkjiho_homework1_pkg helloworld_subscriber 명령어 실행
 
 10.rqt_graph 명령어 실행
+
+
